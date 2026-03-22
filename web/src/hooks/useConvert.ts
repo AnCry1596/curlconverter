@@ -38,18 +38,22 @@ export function useConvert(
 
     setResult((prev) => ({ ...prev, loading: true }));
 
+    let cancelled = false;
     timerRef.current = setTimeout(async () => {
       try {
         const code = await Promise.resolve(convertFn(curlInput));
-        setResult({ code, error: null, loading: false });
+        if (!cancelled) setResult({ code, error: null, loading: false });
       } catch (err) {
-        const message =
-          err instanceof Error ? err.message : "Failed to convert curl command.";
-        setResult({ code: null, error: message, loading: false });
+        if (!cancelled) {
+          const message =
+            err instanceof Error ? err.message : "Failed to convert curl command.";
+          setResult({ code: null, error: message, loading: false });
+        }
       }
     }, 150);
 
     return () => {
+      cancelled = true;
       if (timerRef.current) clearTimeout(timerRef.current);
     };
   }, [curlInput, convertFn, wasmReady]);
