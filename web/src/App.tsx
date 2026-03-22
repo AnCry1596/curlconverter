@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTheme } from "./hooks/useTheme";
 import { useConvert } from "./hooks/useConvert";
 import { Header } from "./components/Header";
@@ -8,8 +8,6 @@ import { CodeOutput } from "./components/CodeOutput";
 import {
   Language,
   Variant,
-  DEFAULT_LANGUAGE,
-  DEFAULT_VARIANT,
   loadPersistedLanguage,
   persistLanguage,
 } from "./languages";
@@ -49,19 +47,23 @@ export default function App() {
     persistLanguage(language, variant);
   }
 
-  // Build the conversion function for the selected variant
-  const convertFn =
-    converterModule && wasmReady
-      ? (input: string) => {
-          const fn = (converterModule as unknown as Record<string, (s: string) => string>)[
-            selectedVariant.fn
-          ];
-          if (!fn) throw new Error(`Unknown function: ${selectedVariant.fn}`);
-          return fn(input);
-        }
-      : null;
+  // Build the conversion function for the selected variant — memoized to
+  // avoid re-triggering useConvert's debounce on unrelated re-renders
+  const convertFn = useCallback(
+    (input: string): string => {
+      if (!converterModule || !wasmReady) throw new Error("WASM not ready");
+      const fn = (converterModule as unknown as Record<string, (s: string) => string>)[
+        selectedVariant.fn
+      ];
+      if (!fn) throw new Error(`Unknown function: ${selectedVariant.fn}`);
+      return fn(input);
+    },
+    [converterModule, wasmReady, selectedVariant.fn]
+  );
 
-  const { code, error, loading } = useConvert(curlInput, convertFn, wasmReady);
+  const activeConvertFn = converterModule && wasmReady ? convertFn : null;
+
+  const { code, error, loading } = useConvert(curlInput, activeConvertFn, wasmReady);
 
   return (
     <>

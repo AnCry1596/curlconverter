@@ -16,15 +16,22 @@ export function LanguageSelector({
   const [openLabel, setOpenLabel] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Close dropdown when clicking outside
+  // Close dropdown when clicking outside or pressing Escape
   useEffect(() => {
     function handleClick(e: MouseEvent) {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
         setOpenLabel(null);
       }
     }
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") setOpenLabel(null);
+    }
     document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
   }, []);
 
   function handlePillClick(language: Language) {
@@ -57,6 +64,7 @@ export function LanguageSelector({
                 className={`lang-pill${isActive ? " active" : ""}`}
                 onClick={() => handlePillClick(lang)}
                 aria-expanded={hasVariants ? isOpen : undefined}
+                aria-haspopup={hasVariants ? "menu" : undefined}
               >
                 {lang.label}
                 {hasVariants && <span className="arrow">▾</span>}
