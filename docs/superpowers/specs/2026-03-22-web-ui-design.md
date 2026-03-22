@@ -35,10 +35,10 @@ curlconverter's browser entry point (`src/shell/webParser.ts`) uses top-level `a
 
 **`vite.config.ts` requirements:**
 - `base: "/"` (default — state explicitly)
-- Copy `tree-sitter-bash.wasm` from `node_modules/web-tree-sitter/` into `public/` using `vite-plugin-static-copy` or by manually placing it in `public/` as a build step
+- Copy `tree-sitter-bash.wasm` from `node_modules/curlconverter/dist/` into `public/` using `vite-plugin-static-copy` or by manually placing it in `public/` as a build step. This file is produced by curlconverter's `prepare` script (`npx tree-sitter build --wasm node_modules/tree-sitter-bash`) — it lives in `node_modules/curlconverter/dist/` after install. It does **not** come from `node_modules/web-tree-sitter/` (which only contains the runtime JS).
 - Add `optimizeDeps: { exclude: ["web-tree-sitter"] }` to prevent Vite from pre-bundling the WASM-loading module
 
-The app must always be served from `/` (no subpath deployment).
+The app must always be served from `/` (no subpath deployment). This constraint comes from `locateFile` hardcoded to `"/" + url` inside `webParser.ts` — it cannot be changed without forking the library. Setting `base: "/"` in `vite.config.ts` must match this.
 
 ---
 
