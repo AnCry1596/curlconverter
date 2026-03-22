@@ -51,7 +51,7 @@ export function LanguageSelector({
   }
 
   return (
-    <div className="lang-selector" ref={containerRef}>
+    <div className="lang-selector" ref={containerRef} role="toolbar" aria-label="Language selector">
       <div className="lang-selector-inner">
         {LANGUAGES.map((lang) => {
           const isActive = lang.label === selectedLanguage.label;

@@ -26,8 +26,8 @@ function wrapLines(html: string): string {
   // Split on actual newlines (not HTML tags)
   const lines = html.split("\n");
   // Remove trailing empty line if present
-  if (lines[lines.length - 1] === "") lines.pop();
-  return lines.map((line) => `<span class="line">${line}</span>`).join("\n");
+  const trimmed = lines[lines.length - 1] === "" ? lines.slice(0, -1) : lines;
+  return trimmed.map((line) => `<span class="line">${line}</span>`).join("\n");
 }
 
 export function CodeOutput({ code, error, loading, hljsLang }: CodeOutputProps) {

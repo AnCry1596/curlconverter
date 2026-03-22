@@ -114,8 +114,10 @@ export const LANGUAGES: Language[] = [
 ];
 
 // Default: Python / requests
-export const DEFAULT_LANGUAGE = LANGUAGES.find((l) => l.label === "Python")!;
-export const DEFAULT_VARIANT = DEFAULT_LANGUAGE.variants![0];
+const _defaultLanguage = LANGUAGES.find((l) => l.label === "Python");
+if (!_defaultLanguage) throw new Error("Default language 'Python' not found in LANGUAGES");
+export const DEFAULT_LANGUAGE: Language = _defaultLanguage;
+export const DEFAULT_VARIANT: Variant = DEFAULT_LANGUAGE.variants![0];
 
 // Load persisted language from localStorage, fall back to default
 export function loadPersistedLanguage(): ResolvedLanguage {
