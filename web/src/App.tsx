@@ -35,10 +35,13 @@ export default function App() {
     });
   }, []);
 
-  // Language state — restored from localStorage
-  const persisted = loadPersistedLanguage();
-  const [selectedLanguage, setSelectedLanguage] = useState<Language>(persisted.language);
-  const [selectedVariant, setSelectedVariant] = useState<Variant>(persisted.variant);
+  // Language state — restored from localStorage (lazy initializer avoids re-running on every render)
+  const [selectedLanguage, setSelectedLanguage] = useState<Language>(
+    () => loadPersistedLanguage().language
+  );
+  const [selectedVariant, setSelectedVariant] = useState<Variant>(
+    () => loadPersistedLanguage().variant
+  );
 
   function handleLanguageSelect(language: Language, variant: Variant) {
     setSelectedLanguage(language);

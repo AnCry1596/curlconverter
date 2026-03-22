@@ -36,10 +36,14 @@ export function CodeOutput({ code, error, loading, hljsLang }: CodeOutputProps) 
 
   async function handleCopy() {
     if (!code) return;
-    await navigator.clipboard.writeText(code);
-    setCopied(true);
-    if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
-    copyTimerRef.current = setTimeout(() => setCopied(false), 2000);
+    try {
+      await navigator.clipboard.writeText(code);
+      setCopied(true);
+      if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+      copyTimerRef.current = setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Clipboard write failed (permission denied, non-secure context, etc.)
+    }
   }
 
   useEffect(() => {
