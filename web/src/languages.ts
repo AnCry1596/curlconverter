@@ -134,8 +134,12 @@ export function loadPersistedLanguage(): ResolvedLanguage {
 }
 
 export function persistLanguage(language: Language, variant: Variant): void {
-  localStorage.setItem(
-    "curlconverter_lang",
-    JSON.stringify({ label: language.label, variantLabel: variant.label })
-  );
+  try {
+    localStorage.setItem(
+      "curlconverter_lang",
+      JSON.stringify({ label: language.label, variantLabel: variant.label })
+    );
+  } catch {
+    // localStorage unavailable
+  }
 }
