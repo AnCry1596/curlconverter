@@ -4,6 +4,9 @@ import { viteStaticCopy } from "vite-plugin-static-copy";
 
 export default defineConfig({
   base: "/",
+  build: {
+    target: "esnext",
+  },
   plugins: [
     react(),
     viteStaticCopy({
