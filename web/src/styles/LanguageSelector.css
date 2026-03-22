@@ -1,0 +1,87 @@
+.lang-selector {
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+  padding: 4px 0;
+}
+
+.lang-selector-inner {
+  display: flex;
+  gap: 6px;
+  white-space: nowrap;
+  padding: 2px 2px 6px;
+}
+
+/* Wrapper for pill + dropdown */
+.lang-item {
+  position: relative;
+  display: inline-flex;
+}
+
+.lang-pill {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 5px 14px;
+  font-size: 0.82rem;
+  font-family: inherit;
+  cursor: pointer;
+  color: var(--text);
+  white-space: nowrap;
+  transition: border-color 0.15s, background 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.lang-pill:hover {
+  border-color: var(--accent);
+}
+
+.lang-pill.active {
+  background: var(--pill-active-bg);
+  border-color: var(--pill-active-bg);
+  color: var(--pill-active-text);
+}
+
+.lang-pill .arrow {
+  font-size: 0.6rem;
+  opacity: 0.7;
+}
+
+/* Variant dropdown */
+.lang-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  z-index: 100;
+  min-width: 160px;
+  overflow: hidden;
+}
+
+.lang-dropdown button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 8px 14px;
+  background: none;
+  border: none;
+  font-size: 0.82rem;
+  font-family: inherit;
+  cursor: pointer;
+  color: var(--text);
+  transition: background 0.1s;
+}
+
+.lang-dropdown button:hover {
+  background: var(--border);
+}
+
+.lang-dropdown button.active-variant {
+  color: var(--accent);
+  font-weight: 500;
+}
