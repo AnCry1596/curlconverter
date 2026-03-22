@@ -24,13 +24,13 @@ export function useConvert(
     // If WASM not ready, stay in loading state
     if (!wasmReady || !convertFn) {
       setResult({ code: null, error: null, loading: true });
-      return;
+      return () => { if (timerRef.current) clearTimeout(timerRef.current); };
     }
 
     // If input is empty, show empty state
     if (!curlInput.trim()) {
       setResult({ code: null, error: null, loading: false });
-      return;
+      return () => { if (timerRef.current) clearTimeout(timerRef.current); };
     }
 
     // Debounce: 150ms trailing-edge
